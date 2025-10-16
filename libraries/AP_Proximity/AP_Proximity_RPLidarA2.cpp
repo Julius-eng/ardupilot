@@ -162,31 +162,6 @@ void AP_Proximity_RPLidarA2::send_request_for_device_info()
     Debug(1, "Sent device information request");
 }
 
-void AP_Proximity_RPLidarA2::reset()
-{
-    _state = State::RESET;
-    _byte_count = 0;
-}
-
-bool AP_Proximity_RPLidarA2::make_first_byte_in_payload(uint8_t desired_byte)
-{
-    if (_byte_count == 0) {
-        return false;
-    }
-    if (_payload[0] == desired_byte) {
-        return true;
-    }
-    for (auto i=1; i<_byte_count; i++) {
-        if (_payload[i] == desired_byte) {
-            consume_bytes(i);
-            return true;
-        }
-    }
-    // just not in our buffer.  Throw everything away:
-    _byte_count = 0;
-    return false;
-}
-
 void AP_Proximity_RPLidarA2::get_readings()
 {
     uint16_t _bytes_read = 0;
